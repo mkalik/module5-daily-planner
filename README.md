@@ -14,6 +14,6 @@ A daily planner to manage ones day
 
 ## 3.Credits:
 
-got some starter code from ![this repo]('https://github.com/coding-boot-camp/crispy-octo-meme')
+got some starter code from here: https://github.com/coding-boot-camp/crispy-octo-meme
 
 everything else done by Malik Kouyate(mkalik)
