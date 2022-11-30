@@ -3,7 +3,7 @@
 # Daily Planner
 
 
-![Picture of application]('/images/day_ss.png')
+![Picture of application](/images/day_ss.png)
 
 ## 1.Installaion:
 
