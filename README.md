@@ -5,7 +5,7 @@
 
 ![Picture of application](/images/day_ss.png)
 
-(Try it out)[https://mkalik.github.io/module5-daily-planner/]
+[Try it out!](https://mkalik.github.io/module5-daily-planner/ )
 
 ## 1.Installaion:
 
