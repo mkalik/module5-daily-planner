@@ -2,11 +2,12 @@
 
 # Daily Planner
 
-TODO: add screen shot and live link
+
+![Picture of application]('images/day_ss.png')
 
 ## 1.Installaion:
 
-clone this repo.
+clone this repo and use as you see fit. Also there is a live link so feel free to simply bookmark and plan your day!
 
 ## 2.Usage:
 

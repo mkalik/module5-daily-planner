@@ -1,28 +1,26 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
+// TODO: add something that checks everything on the hour to see if times are current
 var when = ['past', 'present', 'future'];
 var set;
-var id;
 var jscur_time = new Date();
 var now = dayjs();
 var cur_time = now.format('dddd, MMMM D');
-var format = {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-};
 // var hour = time.getHours();
 var time;
-var hour = dayjs().hour();
+var hour = dayjs().hour(); //gets the current hour from day js.
 var block;
 var planner_blocks;
 var hour_block;
 var l_task;
 
 for (var i = 9; i < 18; i++) {
-    i <= 12 ? (time = String(i) + ' AM') : (time = String(i % 12) + ' PM');
+    //populates the page with time blocks and makes sure that they are given the past present or future colors.
+    i < 12
+        ? (time = String(i) + ' AM')
+        : i == 12 //checks to see if the time is equal to 12.
+        ? (time = String(i) + ' PM') //if it is appends a PM to the 12.
+        : (time = String(i % 12) + ' PM'); //if its after, converts it to 12 hour time and appends a PM to it.
     if (i < hour) {
+        //gives the proper past,present, future attribute.
         set = when[0];
     } else if (i == hour) {
         set = when[1];
@@ -35,11 +33,10 @@ for (var i = 9; i < 18; i++) {
     block = 'hour-' + i + '';
     console.log('block: ' + block);
     console.log('local console log: ' + localStorage.getItem(block));
-    localStorage.getItem(block) != null
+    localStorage.getItem(block) != null //populates the page with previous entries
         ? (l_task = localStorage.getItem(block))
         : (l_task = '');
     hour_block = '<div id="' + block + '" class="row time-block ' + set + '">';
-    // '<div id="hour-' + block + '" class="row time-block ' + set + '">';
     planner_blocks =
         '        <div class="col-2 col-md-1 hour text-center py-3">' +
         time +
@@ -54,73 +51,39 @@ for (var i = 9; i < 18; i++) {
     console.log(i % 12);
     $(hour_block).appendTo('.container-fluid').append(planner_blocks);
 }
-$(function () {
-    // TODO: Add a listener for click events on the save button. This code should
-    // use the id in the containing time-block as a key to save the user input in
-    // local storage. HINT: What does `this` reference in the click listener
-    // function? How can DOM traversal be used to get the "hour-x" id of the
-    // time-block containing the button that was clicked? How might the id be
-    // useful when saving the description in local storage?
 
-    // var text = document.querySelector
+var blocks = document.querySelector('.container-fluid').children;
+
+setInterval(checkTime, 60 * 1000); //checks every minute to see if the current time is the right time
+function checkTime() {
+    //this function checks and changes the attributes of the blocks to make sure that time is correct.
+    console.log('time check');
+    if (hour != dayjs().hour()) {
+        hour = dayjs().hour();
+        var blocks = document.querySelector('.container-fluid').children;
+        for (var x = 0; x < blocks.length; x++) {
+            var blockTime = blocks[x].classList[2];
+            var blockHour = blocks[x].id.split('-')[1];
+            if (blockHour < hour) {
+                blocks[x].classList.replace(blockTime, when[0]);
+            } else if (blockHour > hour) {
+                blocks[x].classList.replace(blockTime, when[2]);
+            } else {
+                blocks[x].classList.replace(blockTime, when[1]);
+            }
+        }
+    }
+}
+$(function () {
+    $('#currentDay').text(cur_time); // shows the current day at the top of the page.
     $(':button').click(function () {
+        //allows for user interaction and storage of information.
         console.log(this);
-        var c_row = $(this).parent().attr('id');
+        var c_row = $(this).parent().attr('id'); //gets id of the parent row
         console.log('c_row: ' + c_row);
         console.log('c_row1: ' + c_row);
-        alert($('#' + c_row + '> textarea').val());
-        var task = $('#' + c_row + '> textarea').val();
-        localStorage.setItem(c_row, task);
+        // alert($('#' + c_row + '> textarea').val()); this was just a test
+        var task = $('#' + c_row + '> textarea').val(); //gets value of user input
+        localStorage.setItem(c_row, task); //puts that value into local storage
     });
 });
-
-// var when = ['past', 'present', 'future'];
-// var set;
-// var id;
-// var time = new Date();
-// var hour = time.getHours();
-// var block;
-// var planner_blocks;
-// var hour_block;
-
-// for (var i = 9; i < 18; i++) {
-//     i <= 12 ? (time = String(i) + ' AM') : (time = String(i % 12) + ' PM');
-//     if (i < hour) {
-//         set = when[0];
-//     } else if (i == hour) {
-//         set = when[1];
-//     } else {
-//         set = when[2];
-//     }
-//     console.log(hour);
-//     console.log(set);
-//     block = i;
-//     hour_block =
-//         '<div id="hour-' + block + '" class="row time-block ' + set + '">';
-//     planner_blocks =
-//         '        <div class="col-2 col-md-1 hour text-center py-3">' +
-//         time +
-//         '</div>' +
-//         '        <textarea class="col-8 col-md-10 description" rows="3"> </textarea> ' +
-//         '        <button class="btn saveBtn col-2 col-md-1" aria-label="save"> ' +
-//         '          <i class="fas fa-save" aria-hidden="true"></i> ' +
-//         '        </button> ' +
-//         '      </div> ';
-//     console.log(i % 12);
-//     $(hour_block).appendTo('.container-fluid').append(planner_blocks);
-// }
-
-// TODO: Add code to apply the past, present, or future class to each time
-// block by comparing the id to the current hour. HINTS: How can the id
-// attribute of each time-block be used to conditionally add or remove the
-// past, present, and future classes? How can Day.js be used to get the
-// current hour in 24-hour time?
-//
-// TODO: Add code to get any user input that was saved in localStorage and set
-// the values of the corresponding textarea elements. HINT: How can the id
-// attribute of each time-block be used to do this?
-//
-// TODO: Add code to display the current date in the header of the page.
-// $('#currentDay').text(cur_time.toLocaleDateString('en-US', format));
-$('#currentDay').text(cur_time);
-// });
